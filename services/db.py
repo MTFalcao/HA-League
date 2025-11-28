@@ -1,25 +1,25 @@
 import psycopg2
 import psycopg2.extras
 import os
-from dotenv import load_dotenv
-
-load_dotenv()
+from urllib.parse import urlparse
 
 def get_db_connection():
-    # Tenta usar DATABASE_URL (Railway / produção)
-    DATABASE_URL = os.getenv("DATABASE_URL")
+    db_url = os.getenv("DATABASE_URL")
 
-    if DATABASE_URL:
-        return psycopg2.connect(DATABASE_URL, sslmode="require")
+    if not db_url:
+        raise Exception("DATABASE_URL não encontrada!")
 
-    # Se não tiver DATABASE_URL, usa as variáveis locais
-    return psycopg2.connect(
-        host=os.getenv("POSTGRES_HOST"),
-        dbname=os.getenv("POSTGRES_DB"),
-        user=os.getenv("POSTGRES_USER"),
-        password=os.getenv("POSTGRES_PASSWORD"),
-        port=os.getenv("POSTGRES_PORT")
+    result = urlparse(db_url)
+
+    conn = psycopg2.connect(
+        database=result.path[1:],   # remove a barra inicial
+        user=result.username,
+        password=result.password,
+        host=result.hostname,
+        port=result.port
     )
+    return conn
+
 
 def init_db():
     conn = get_db_connection()
