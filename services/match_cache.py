@@ -3,9 +3,8 @@ import json
 import time
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  # /services
-ROOT = os.path.dirname(BASE_DIR)                       # /
-DB_PATH = os.path.join(ROOT, "data", "matches.db")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
+DB_PATH = os.path.join(BASE_DIR, "matches.db")
 
 # ======================================================
 # Inicialização do DB
