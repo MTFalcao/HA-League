@@ -1,0 +1,177 @@
+{% extends "index.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/player_profile.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+
+<!-- ========================== -->
+<!-- HEADER FULL-WIDTH          -->
+<!-- ========================== -->
+<div class="profile-header">
+
+    <div class="profile-left">
+
+        <img src="{{ player.icon }}" class="profile-icon">
+
+        <div class="profile-info">
+            <h1 class="name-row">
+                {{ player.name }}
+                <span class="lane-inline">
+                    <img class="lane-icon"
+                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ player.lane_primary }}.png">
+                    <img class="lane-icon"
+                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ player.lane_secondary }}.png">
+                </span>
+            </h1>
+
+            <span class="tag-name">#{{ player.nickname.split('#')[1] }}</span>
+
+            <div class="rank-row">
+                <img class="rank-icon"
+                    src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ player.elo_solo.split(' ')[0] | lower }}.svg">
+                <span>{{ player.elo_solo }} — {{ player.lp_solo }} LP</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="header-stats-grid">
+
+        <div class="header-stat-box">
+            <div class="header-stat-title">WR Solo/Duo</div>
+            <div class="header-stat-value">{{ wr_solo }}%</div>
+        </div>
+
+        <div class="header-stat-box">
+            <div class="header-stat-title">WR Flex</div>
+            <div class="header-stat-value">{{ wr_flex }}%</div>
+        </div>
+
+        <div class="header-stat-box">
+            <div class="header-stat-title">KDA Médio</div>
+            <div class="header-stat-value">{{ stats.kda_avg }}</div>
+        </div>
+
+        <a href="{{ url_for('refresh_player_history', puuid=player['puuid']) }}" class="refresh-btn-new">
+            <i class="fa-solid fa-rotate-right"></i>
+        </a>
+
+    </div>
+
+
+</div>
+
+<!-- ========================== -->
+<!-- CONTAINER CENTRAL IGUAL HOME -->
+<!-- ========================== -->
+<div class="page-container">
+
+    <div class="content-grid">
+
+        <!-- ========================== -->
+        <!-- HISTÓRICO -->
+        <!-- ========================== -->
+        <div class="left-column">
+
+            <h2 class="section-title">Histórico Recentes (10)</h2>
+
+            {% for m in history %}
+
+
+            <div class="match-card {{ 'win' if m.result == 'WIN' else 'loss' }}">
+
+                <div class="left-info">
+                    <img class="match-champ"
+                         src="https://ddragon.leagueoflegends.com/cdn/15.23.1/img/champion/{{ m.champion }}.png">
+
+                    <div>
+                        <h3 class="champ-name">{{ m.champion }}</h3>
+                        <p class="lane-text">{{ m.lane }}</p>
+                        <p class="kda-big">
+                            {{ m.kills }}/{{ m.deaths }}/{{ m.assists }}
+                            <span class="kda-small">
+                                KDA:
+                                {% if m.deaths == 0 %}
+                                    ∞
+                                {% else %}
+                                    {{ ((m.kills + m.assists) / m.deaths) | round(2) }}
+                                {% endif %}
+                            </span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="center-stats">
+                    <div class="stat-box">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span class="stat-value">{{ m.cs }}</span>
+                        <span class="stat-label">CS</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <i class="fa-solid fa-coins"></i>
+                        <span class="stat-value">{{ m.gold }}</span>
+                        <span class="stat-label">Gold</span>
+                    </div>
+
+                    <div class="stat-box">
+                        <i class="fa-solid fa-clock"></i>
+                        <span class="stat-value">{{ m.duration }}</span>
+                    </div>
+                </div>
+
+                <div class="result-side">
+                    <h2 class="{{ 'result-win' if m.result=='WIN' else 'result-loss' }}">
+                        {{ 'VITÓRIA' if m.result=='WIN' else 'DERROTA' }}
+                    </h2>
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ========================== -->
+        <!-- TOP CAMPEÕES -->
+        <!-- ========================== -->
+        <div class="right-column">
+
+            <!-- Painel: Top Campeões -->
+            <div class="panel">
+                <h3>Ultimos 50 Campeões usados</h3>
+
+                {% for c in top_champs %}
+                <div class="champ-entry">
+                    <img src="https://ddragon.leagueoflegends.com/cdn/15.23.1/img/champion/{{ c.champion }}.png">
+                    <div>
+                        <strong>{{ c.champion }}</strong>
+                        <p>{{ c.games }} jogos • {{ c.winrate }}% WR • {{ c.kda }} KDA</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Painel: Estatísticas do Inhouse -->
+            <div class="panel">
+                <h3>Estatísticas do Inhouse</h3>
+
+                <p>Vitórias no Inhouse: <strong>—</strong></p>
+                <p>Derrotas no Inhouse: <strong>—</strong></p>
+                <p>MVP Awards: <strong>—</strong></p>
+                <p>Pentakills: <strong>—</strong></p>
+                <p>Melhor Lane: <strong>—</strong></p>
+            </div>
+
+        </div>
+        
+
+    </div>
+
+</div>
+
+{% endblock %}

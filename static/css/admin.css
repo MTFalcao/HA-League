@@ -1,0 +1,200 @@
+
+/* =============================== */
+/*          ADMIN PANEL            */
+/* =============================== */
+.admin-wrapper {
+    width: 90%;
+    margin: 40px auto;
+}
+
+.admin-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-top h1 {
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.admin-add-btn {
+    background: #4cafef;
+    padding: 10px 16px;
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.admin-grid {
+    margin-top: 30px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+}
+
+.admin-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(17, 24, 39, 0.65);
+    border-radius: 14px;
+    padding: 18px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+.admin-icon {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+}
+
+.lane-icon{
+    width: 35px;
+
+}
+
+.admin-info {
+    flex: 1;
+}
+
+.admin-name {
+    font-size: 22px;
+    margin: 0;
+}
+
+.admin-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.edit-btn, .delete-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.edit-btn:hover {
+    color: #4cafef;
+}
+
+.delete-btn:hover {
+    color: #ff5c5c;
+}
+
+
+/* =============================== */
+/*          EDIT PAGE              */
+/* =============================== */
+.edit-wrapper {
+    width: 500px;
+    margin: 40px auto;
+}
+
+.edit-card {
+    background: rgba(17, 24, 39, 0.7);
+    padding: 25px;
+    border-radius: 14px;
+}
+
+.field {
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.field select {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border-radius: 8px;
+    border: none;
+    padding: 10px;
+}
+
+.save-btn {
+    margin-top: 10px;
+    padding: 12px;
+    border: none;
+    background: #6a5acd;
+    color: white;
+    font-weight: bold;
+    width: 100%;
+    border-radius: 8px;
+}
+
+
+/* =============================== */
+/*          ADMIN ADD              */
+/* =============================== */
+/* Wrapper geral da página */
+.add-wrapper {
+    width: 100%;
+    text-align: center;
+    margin-top: 60px;
+}
+
+/* Título centralizado */
+.add-title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+/* Centraliza o card igual o login */
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+/* O card em si — igual login */
+.form-box {
+    width: 420px;
+    background: rgba(17, 24, 39, 0.75);
+    padding: 30px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 0 25px rgba(0,0,0,0.35);
+    backdrop-filter: blur(8px);
+}
+
+/* Labels */
+.form-box label {
+    margin-top: 12px;
+    margin-bottom: 6px;
+    opacity: 0.8;
+    display: block;
+    text-align: left;
+}
+
+/* Inputs */
+.form-box input,
+.form-box select {
+    padding: 12px 14px;
+    width: 100%;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.08);
+    color: white;
+    box-sizing: border-box; 
+}
+
+
+/* Botão igual login */
+.btn-primary {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    background: #6a5acd;
+    color: white;
+    font-weight: bold;
+    transition: .2s;
+}
+
+.btn-primary:hover {
+    background: #7b6dff;
+}

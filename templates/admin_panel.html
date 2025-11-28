@@ -1,0 +1,63 @@
+{% extends "index.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-wrapper">
+
+    <div class="admin-top">
+        <h1>Painel Administrativo</h1>
+        <a href="{{ url_for('cadastrar') }}" class="admin-add-btn">
+            <i class="fa-solid fa-user-plus"></i> Novo Jogador
+        </a>
+    </div>
+
+    <p class="admin-sub">Gerencie os jogadores do Inhouse</p>
+
+    <div class="admin-grid">
+
+        {% for p in players %}
+        <div class="admin-card">
+
+            <img src="{{ p.icon }}" class="admin-icon">
+
+            <div class="admin-info">
+                <h2 class="admin-name">{{ p.name }}</h2>
+                <span class="admin-tag">#{{ p.nickname.split('#')[1] }}</span>
+
+                <div class="lane-row">
+                    <img class="lane-icon"
+                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_primary }}.png">
+                    <img class="lane-icon"
+                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_secondary }}.png">
+                </div>
+            </div>
+
+            <div class="admin-actions">
+
+                <!-- EDITAR -->
+                <a href="{{ url_for('edit_player', nickname=p.nickname) }}" class="edit-btn">
+                    <i class="fa-solid fa-pen"></i>
+                </a>
+
+                <!-- DELETAR -->
+                <form method="POST" action="{{ url_for('delete_player', nickname=p.nickname) }}"
+                      onsubmit="return confirm('Tem certeza que deseja APAGAR este jogador?')">
+                    <button class="delete-btn">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </form>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

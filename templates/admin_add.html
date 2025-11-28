@@ -1,0 +1,45 @@
+{% extends "index.html" %}
+
+{% block title %}Cadastrar Jogador{% endblock %}
+{% block content %}
+
+<div class="add-wrapper">
+
+    <h2 class="add-title">Cadastrar Novo Jogador</h2>
+
+    <div class="form-wrapper">
+        <form method="POST" class="form-box">
+
+            <label>Riot ID (Nome#TAG)</label>
+            <input type="text" name="summoner_name" placeholder="Ex: Maciel Entregas#BR2" required>
+
+            <label>Lane Primária</label>
+            <select name="lane_primary" required>
+                <option value="top">Top</option>
+                <option value="jungle">Jungle</option>
+                <option value="middle">Mid</option>
+                <option value="bottom">ADC</option>
+                <option value="utility">Support</option>
+            </select>
+
+            <label>Lane Secundária</label>
+            <select name="lane_secondary" required>
+                <option value="top">Top</option>
+                <option value="jungle">Jungle</option>
+                <option value="middle">Mid</option>
+                <option value="bottom">ADC</option>
+                <option value="utility">Support</option>
+            </select>
+
+            <button type="submit" class="btn-primary">Cadastrar</button>
+        </form>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}

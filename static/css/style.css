@@ -1,0 +1,118 @@
+/* ============================================
+   RESET GERAL
+============================================ */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: white;
+
+    /* 🔥 FUNDO GLOBAL (tema azul elegante) */
+    background: linear-gradient(135deg, #0b132b, #1c2541, #3a506b);
+    background-attachment: fixed;
+}
+
+select option {
+    background-color: #252c3d;
+    color: white;
+}
+
+
+/* ============================================
+   HEADER
+============================================ */
+.site-header {
+    background: rgba(21, 4, 40, 0.85);    /* Roxo escuro com transparência */
+    backdrop-filter: blur(6px);           /* Blur moderno */
+    padding: 15px 0;
+    box-shadow: 0 2px 4px #00000070;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #c084fc;
+    margin: 0;
+}
+
+/* NAV */
+.nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: #e9d5ff;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.nav a:hover {
+    color: #ffffff;
+}
+
+/* Container padrão do header */
+.container {
+    width: 90%;
+    margin: auto;
+}
+
+.flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* FLASH MESSAGES */
+.flash-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.flash {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    min-width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    animation: fadeIn 0.3s ease-out;
+}
+
+/* Cores */
+.flash.success {
+    background: #28a745;
+}
+.flash.error {
+    background: #dc3545;
+}
+.flash.info {
+    background: #17a2b8;
+}
+.flash.warning {
+    background: #ffc107;
+    color: #000;
+}
+
+
+.fade-out {
+    opacity: 0 !important;
+    transition: opacity 0.6s ease-out;
+}
+
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translate(-50%, -10px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+}

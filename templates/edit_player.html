@@ -1,0 +1,44 @@
+{% extends "index.html" %}
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="edit-wrapper">
+
+    <h1 class="edit-title">Editar Jogador</h1>
+
+    <form method="POST" class="edit-card">
+        
+        <div class="field">
+            <label>Rota Primária</label>
+            <select name="lane_primary" required>
+                <option value="top"  {% if player.lane_primary == 'top' %}selected{% endif %}>Top</option>
+                <option value="jungle" {% if player.lane_primary == 'jungle' %}selected{% endif %}>Jungle</option>
+                <option value="middle" {% if player.lane_primary == 'middle' %}selected{% endif %}>Mid</option>
+                <option value="bottom" {% if player.lane_primary == 'bottom' %}selected{% endif %}>ADC</option>
+                <option value="utility" {% if player.lane_primary == 'utility' %}selected{% endif %}>Suporte</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label>Rota Secundária</label>
+            <select name="lane_secondary">
+                <option value="top"  {% if player.lane_secondary == 'top' %}selected{% endif %}>Top</option>
+                <option value="jungle" {% if player.lane_secondary == 'jungle' %}selected{% endif %}>Jungle</option>
+                <option value="middle" {% if player.lane_secondary == 'middle' %}selected{% endif %}>Mid</option>
+                <option value="bottom" {% if player.lane_secondary == 'bottom' %}selected{% endif %}>ADC</option>
+                <option value="utility" {% if player.lane_secondary == 'utility' %}selected{% endif %}>Suporte</option>
+            </select>
+        </div>
+
+        <button class="save-btn" type="submit">
+            Salvar Alterações
+        </button>
+
+    </form>
+
+</div>
+
+{% endblock %}

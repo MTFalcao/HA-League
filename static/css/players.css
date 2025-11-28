@@ -1,0 +1,180 @@
+/* WRAPPER */
+.players-wrapper {
+    width: 90%;
+    margin: 40px auto;
+}
+
+/* VOLTAR */
+.back-link {
+    text-decoration: none;
+    color: #9fc5ff;
+    font-weight: 500;
+    opacity: 0.9;
+}
+
+.back-link i {
+    margin-right: 6px;
+}
+
+/* TÍTULO */
+.players-title {
+    margin-top: 10px;
+    font-size: 34px;
+    font-weight: bold;
+}
+
+.players-subtitle {
+    opacity: 0.8;
+    margin-bottom: 30px;
+}
+
+/* SEARCH */
+.players-search {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 28px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255,255,255,0.07);
+    color: white;
+    font-size: 16px;
+}
+
+/* GRID */
+.players-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(450px, 1fr));
+
+    gap: 16px;
+}
+
+/* CARD */
+.player-card {
+    display: flex;
+    gap: 18px;
+    padding: 18px;
+    
+
+    background: rgba(17, 24, 39, 0.65);
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.08);
+
+    box-shadow: 0 0 20px rgba(0,0,0,0.25);
+    transition: 0.2s;
+
+    text-decoration: none;
+    color: white;
+}
+
+.player-card:hover {
+    background: rgba(17, 24, 39, 0.85);
+    transform: translateY(-3px);
+}
+
+/* IMG */
+.player-icon-large {
+    width: 75px;
+    height: 75px;
+    border-radius: 12px;
+}
+
+/* INFO */
+.player-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* NOME */
+.player-name-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.player-name {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.player-tag {
+    opacity: 0.6;
+    font-size: 14px;
+}
+
+/* LANES */
+.lane-row {
+    display: flex;
+    gap: 6px;
+    margin: 6px 0;
+}
+
+.lane-icon {
+    width: 22px;
+    opacity: 0.85;
+}
+
+/* ELOS */
+/* WRAPPER dos dois elos lado a lado */
+.elo-row {
+    display: flex;
+    gap: 30px;
+    margin-top: 12px;
+}
+
+.elo-text {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.wl-text{
+    font-size: 13px;
+    opacity: 0.7;
+
+}
+
+
+
+/* Cada coluna SOLO | FLEX */
+.elo-column {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Linha superior: icone + rank */
+.elo-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+/* Linha inferior: W/L */
+.elo-bottom {
+    margin-left: 38px; /* alinhamento com o rank */
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* Ícone do rank */
+.rank-icon {
+    width: 28px;
+    height: 28px;
+    opacity: 0.95;
+}
+
+
+/* RESPONSIVO */
+@media (max-width: 1100px) {
+    .players-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .players-grid {
+        grid-template-columns: 1fr;
+    }
+}
