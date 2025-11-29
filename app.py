@@ -6,14 +6,14 @@ import psycopg2
 import psycopg2.extras
 import unicodedata
 import os
-import sqlite3
+import requests
 
 from services.db import get_db_connection, init_db
 from services.riot_api import (
     get_account_data, get_summoner_data_by_puuid,
     get_ranked_stats, load_ranked_matches,
     extract_history, extract_top_champs,
-    calculate_player_stats
+    calculate_player_stats,get_top3_masteries
 )
 
 from services.match_cache import init_matches_db, DB_PATH as MATCH_DB_PATH
@@ -110,6 +110,26 @@ def get_all_players():
     cur.close()
     conn.close()
     return data
+
+
+# Carrega lista de campeões 1 vez
+champ_list = requests.get(
+    "https://ddragon.leagueoflegends.com/cdn/14.1.1/data/en_US/champion.json"
+).json()["data"]
+
+def get_champion_name_by_id(champ_id):
+    for champ in champ_list.values():
+        if int(champ["key"]) == champ_id:
+            return champ["id"]   # Ex: "Yasuo"
+    return None
+
+
+@app.template_filter()
+def format_pts(value):
+    try:
+        return f"{int(value):,}".replace(",", ".")
+    except:
+        return value
 
 
 # =====================================================
@@ -274,6 +294,9 @@ def player_profile(name):
 
     puuid = validar_puuid(player["puuid"])
 
+    # ============================
+    #  RANQUEADAS
+    # ============================
     elo = get_ranked_stats(puuid)
 
     solo_total = elo["solo_wins"] + elo["solo_losses"]
@@ -282,10 +305,24 @@ def player_profile(name):
     flex_total = elo["flex_wins"] + elo["flex_losses"]
     wr_flex = round(elo["flex_wins"] / flex_total * 100, 1) if flex_total else 0
 
+    # ============================
+    #  PARTIDAS
+    # ============================
     matches = load_ranked_matches(puuid, count=50)
     history = extract_history(puuid, matches, limit=10)
     stats = calculate_player_stats(history)
     top_champs = extract_top_champs(puuid, matches)
+
+    # ============================
+    #  TOP 3 MAESTRIAS
+    # ============================
+    top3 = get_top3_masteries(puuid)
+
+
+    if top3:
+        for m in top3:
+            champ_key = get_champion_name_by_id(m["championId"])
+            m["championName"] = champ_key  # usado no ícone
 
     return render_template("player_profile.html",
                            player=player,
@@ -293,7 +330,8 @@ def player_profile(name):
                            stats=stats,
                            wr_solo=wr_solo,
                            wr_flex=wr_flex,
-                           top_champs=top_champs)
+                           top_champs=top_champs,
+                           top3=top3)
 
 
 @app.route("/refresh/<puuid>")
@@ -398,5 +436,5 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000)),
-        debug=False
+        debug=True
     )

@@ -22,11 +22,29 @@ select option {
    HEADER
 ============================================ */
 .site-header {
-    background: rgba(21, 4, 40, 0.85);    /* Roxo escuro com transparência */
-    backdrop-filter: blur(6px);           /* Blur moderno */
-    padding: 15px 0;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+
+    background: rgba(21, 4, 40, 0.85);
+    backdrop-filter: blur(6px);
+    padding: 12px 0;
     box-shadow: 0 2px 4px #00000070;
 }
+
+/* wrapper interno do header */
+.header-inner {
+    width: 90%;
+    max-width: 1400px;
+    margin: auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
 
 .logo {
     font-size: 24px;

@@ -1,5 +1,9 @@
 import requests
 import os
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 from services.match_cache import (
     save_player_match_id,
@@ -35,7 +39,6 @@ def get_summoner_data_by_puuid(puuid):
     headers = {"X-Riot-Token": API_KEY}
 
     response = requests.get(url, headers=headers)
-    print("🔍 Summoner API retorno:", response.status_code, response.text)
 
     if response.status_code != 200:
         return None
@@ -274,3 +277,17 @@ def calculate_player_stats(history):
         "winrate": winrate,
         "kda_avg": round(kda, 2),
     }
+
+# ============================================================
+# 7) Maestria de Campeões
+# ============================================================
+
+def get_top3_masteries(puuid, region="br1"):
+    url = f"https://{region}.api.riotgames.com/lol/champion-mastery/v4/champion-masteries/by-puuid/{puuid}"
+    r = requests.get(url, headers={"X-Riot-Token": API_KEY})
+
+    if r.status_code != 200:
+        return None
+
+    data = r.json()
+    return data[:3]  # Só as 3 maiores

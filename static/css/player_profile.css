@@ -3,10 +3,12 @@
 /* =============================== */
 
 .page-container {
-    width: 90%;
-    max-width: 1400px;
-    margin: 40px auto;
+    width: 100%;
+    padding: 40px 4%;
+    box-sizing: border-box;
 }
+
+
 /* =============================== */
 /*     PROFILE HEADER    */
 /* =============================== */
@@ -19,6 +21,7 @@
 
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 40px;
 
     box-sizing: border-box;
@@ -30,8 +33,11 @@
     display: flex;
     align-items: center;
     gap: 22px;
-    flex-shrink: 0;  /* avatar nunca encolhe */
+
+    flex-grow: 1;
+    min-width: 0;
 }
+
 
 /* Avatar */
 .profile-icon {
@@ -79,10 +85,10 @@
 /* ====================================== */
 
 .header-stats-grid {
-    margin-left: auto;
     display: flex;
-    align-items: center;
     gap: 18px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .header-stat-box {
@@ -121,14 +127,15 @@
 /* =============================== */
 /*          GRID PRINCIPAL        */
 /* =============================== */
+
 .content-grid {
     margin-top: 30px;
     display: grid;
     grid-template-columns: 1fr 350px;
-    align-items: start; 
+    align-items: start;
     gap: 25px;
 }
-    
+
 
 /* =============================== */
 /*             HISTÓRICO          */
@@ -171,18 +178,16 @@
     font-weight: bold;
 }
 
-
 .lane-text {
     margin: 0;
-
     margin-bottom: 10px;
 }
 
 .kda-big {
     margin-top: 4px;
     font-weight: bold;
-
 }
+
 .kda-small {
     opacity: 0.8;
     margin-left: 4px;
@@ -216,10 +221,10 @@
 .result-loss { color: #ff5555; }
 
 
-
 /* =============================== */
 /*          RIGHT PANEL           */
 /* =============================== */
+
 .panel {
     background: rgba(17, 24, 39, 0.70);
     padding: 20px;
@@ -241,19 +246,201 @@
     border-radius: 8px;
 }
 
-/* Container vertical para os painéis */
 .right-column {
     display: flex;
     flex-direction: column;
-    gap: 22px; /* espaço entre os dois painéis */
+    gap: 22px;
 }
 
-/* Painéis já tinham estilização, só reforçando */
 .right-column .panel {
     width: 100%;
 }
 
-/* Ajuste visual para o espaçamento interno */
 .right-column .panel p {
     margin: 6px 0;
+}
+
+.mastery-panel h3 {
+    margin-bottom: 18px;
+}
+
+.mastery-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 22px;
+    text-align: center;
+}
+
+.mastery-slot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mastery-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.mastery-icon.main {
+    width: 95px;
+    height: 95px;
+}
+
+.main-slot {
+    transform: translateY(-10px);
+}
+
+.mastery-level {
+    margin-top: 6px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.mastery-points {
+    opacity: 0.8;
+    font-size: 12px;
+}
+
+
+/* =============================== */
+/*          RESPONSIVIDADE         */
+/* =============================== */
+
+
+/* ------- 1100px ------- */
+@media (max-width: 1100px) {
+
+    .content-grid {
+        grid-template-columns: 1fr 300px;
+    }
+
+    .profile-header {
+        padding: 25px 4%;
+    }
+}
+
+
+/* ------- 900px → 651px (NOVO FIX) ------- */
+@media (max-width: 900px) {
+
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .profile-left {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .name-row {
+        font-size: 26px;
+        justify-content: center;
+    }
+
+    .profile-icon {
+        width: 95px;
+        height: 95px;
+    }
+
+    .header-stats-grid {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .header-stat-box {
+        min-width: 110px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .right-column {
+        order: -1;
+    }
+}
+
+
+
+/* ------- 650px ------- */
+@media (max-width: 650px) {
+
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .profile-left {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .name-row {
+        font-size: 26px;
+        justify-content: center;
+    }
+
+    .profile-icon {
+        width: 95px;
+        height: 95px;
+    }
+
+    .header-stats-grid {
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .header-stat-box {
+        min-width: 110px;
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .right-column {
+        order: -1;
+    }
+}
+
+
+/* ------- 520px ------- */
+@media (max-width: 520px) {
+
+    .profile-header {
+        padding: 15px 3%;
+    }
+
+    .name-row {
+        font-size: 22px;
+    }
+
+    .profile-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .mastery-icon {
+        width: 55px;
+        height: 55px;
+    }
+
+    .mastery-icon.main {
+        width: 75px;
+        height: 75px;
+    }
+
+    .match-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+        padding: 12px;
+    }
 }

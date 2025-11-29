@@ -64,16 +64,14 @@
 
 </div>
 
-<!-- ========================== -->
-<!-- CONTAINER CENTRAL IGUAL HOME -->
-<!-- ========================== -->
+
 <div class="page-container">
 
     <div class="content-grid">
 
-        <!-- ========================== -->
+
         <!-- HISTÓRICO -->
-        <!-- ========================== -->
+
         <div class="left-column">
 
             <h2 class="section-title">Histórico Recentes (10)</h2>
@@ -135,15 +133,61 @@
 
         </div>
 
+    
 
-        <!-- ========================== -->
-        <!-- TOP CAMPEÕES -->
-        <!-- ========================== -->
+
+
+
+        <!-- RIGHT COLUMN -->
+
         <div class="right-column">
 
-            <!-- Painel: Top Campeões -->
+            <!-- Painel: Top 3 Maestrias -->
+            <div class="panel mastery-panel">
+                <h3>Top Maestria</h3>
+
+                {% if top3 %}
+                <div class="mastery-wrapper">
+
+                    <!-- posição 2 -->
+                    <div class="mastery-slot">
+                        {% if top3|length > 1 %}
+                        <img class="mastery-icon"
+                            src="https://ddragon.leagueoflegends.com/cdn/15.23.1/img/champion/{{ top3[1].championName }}.png">
+                        <div class="mastery-level">Lvl {{ top3[1].championLevel }}</div>
+                        <div class="mastery-points">{{ top3[1].championPoints | format_pts  }} pts</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- posição 1 (maior) -->
+                    <div class="mastery-slot main-slot">
+                        {% if top3|length > 0 %}
+                        <img class="mastery-icon main"
+                            src="https://ddragon.leagueoflegends.com/cdn/15.23.1/img/champion/{{ top3[0].championName }}.png">
+                        <div class="mastery-level">Lvl {{ top3[0].championLevel }}</div>
+                        <div class="mastery-points">{{ top3[0].championPoints | format_pts }} pts</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- posição 3 -->
+                    <div class="mastery-slot">
+                        {% if top3|length > 2 %}
+                        <img class="mastery-icon"
+                            src="https://ddragon.leagueoflegends.com/cdn/15.23.1/img/champion/{{ top3[2].championName }}.png">
+                        <div class="mastery-level">Lvl {{ top3[2].championLevel }}</div>
+                        <div class="mastery-points">{{ top3[2].championPoints | format_pts }} pts</div>
+                        {% endif %}
+                    </div>
+
+                </div>
+                {% else %}
+                <p style="text-align:center; opacity:0.7;">Sem dados de maestria</p>
+                {% endif %}
+            </div>
+
+            <!-- Painel: Últimos 50 campeões -->
             <div class="panel">
-                <h3>Ultimos 50 Campeões usados</h3>
+                <h3>Campeões mais usados</h3>
 
                 {% for c in top_champs %}
                 <div class="champ-entry">
@@ -168,7 +212,6 @@
             </div>
 
         </div>
-        
 
     </div>
 

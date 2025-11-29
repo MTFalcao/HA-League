@@ -43,10 +43,10 @@
 /* GRID */
 .players-grid {
     display: grid;
-    grid-template-columns: repeat(3, minmax(450px, 1fr));
-
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 16px;
 }
+
 
 /* CARD */
 .player-card {
