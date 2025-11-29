@@ -7,7 +7,6 @@ body {
     font-family: 'Segoe UI', Arial, sans-serif;
     color: white;
 
-    /* 🔥 FUNDO GLOBAL (tema azul elegante) */
     background: linear-gradient(135deg, #0b132b, #1c2541, #3a506b);
     background-attachment: fixed;
 }
@@ -17,6 +16,16 @@ select option {
     color: white;
 }
 
+
+/* ============================================
+   CONTAINER PADRÃO (ALINHAMENTO GLOBAL)
+============================================ */
+.page-wrapper {
+    width: 90%;
+    max-width: 1400px;
+    margin: 40px auto;
+    box-sizing: border-box;
+}
 
 /* ============================================
    HEADER
@@ -43,8 +52,6 @@ select option {
     justify-content: space-between;
     align-items: center;
 }
-
-
 
 .logo {
     font-size: 24px;
@@ -73,18 +80,6 @@ select option {
     color: #ffffff;
 }
 
-/* Container padrão do header */
-.container {
-    width: 90%;
-    margin: auto;
-}
-
-.flex-between {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
 /* FLASH MESSAGES */
 .flash-container {
     position: fixed;
@@ -108,27 +103,15 @@ select option {
     animation: fadeIn 0.3s ease-out;
 }
 
-/* Cores */
-.flash.success {
-    background: #28a745;
-}
-.flash.error {
-    background: #dc3545;
-}
-.flash.info {
-    background: #17a2b8;
-}
-.flash.warning {
-    background: #ffc107;
-    color: #000;
-}
-
+.flash.success { background: #28a745; }
+.flash.error { background: #dc3545; }
+.flash.info { background: #17a2b8; }
+.flash.warning { background: #ffc107; color: #000; }
 
 .fade-out {
     opacity: 0 !important;
     transition: opacity 0.6s ease-out;
 }
-
 
 @keyframes fadeIn {
     from { opacity: 0; transform: translate(-50%, -10px); }

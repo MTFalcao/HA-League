@@ -1,10 +1,18 @@
 /* =============================== */
 /*  LAYOUT GERAL   */
 /* =============================== */
-
-.page-container {
+main.page-wrapper {
     width: 100%;
-    padding: 40px 4%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.profile-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 40px 5% !important;
     box-sizing: border-box;
 }
 
@@ -16,6 +24,7 @@
 .profile-header {
     width: 100%;
     padding: 35px 5%;
+
     background: rgba(17, 24, 39, 0.55);
     backdrop-filter: blur(6px);
 
@@ -26,6 +35,7 @@
 
     box-sizing: border-box;
 }
+
 
 
 /* LADO ESQUERDO: avatar + infos */
@@ -229,6 +239,10 @@
     background: rgba(17, 24, 39, 0.70);
     padding: 20px;
     border-radius: 14px;
+
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 .panel h3 {
     text-align: center;

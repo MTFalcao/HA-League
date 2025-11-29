@@ -12,18 +12,16 @@
     <h1 class="title">Bem-vindo a Ashen Heralds League</h1>
     <p class="subtitle">Acompanhe estatísticas, rankings e histórico de partidas.</p>
 
-    <!-- ================================ -->
     <!-- CARDS PRINCIPAIS -->
-    <!-- ================================ -->
     <div class="main-cards">
 
-        <!-- ===== LÍDER ATUAL ===== -->
         {% if players %}
             {% set p = players[0] %}
             {% set raw_elo = p.elo_solo %}
             {% set elo_name = raw_elo.split(' ')[0] | lower %}
 
             <a href="{{ url_for('player_profile', name=p.name) }}" class="main-card link-card">
+
                 <div class="title-row">
                     <i class="fa-solid fa-trophy icon-leader"></i>
                     <h3>Líder Atual</h3>
@@ -31,10 +29,8 @@
 
                 <p class="card-player">
                     {{ p.name }}
-
                     <img class="lane-icon"
                         src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_primary }}.png">
-
                     <img class="lane-icon"
                         src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_secondary }}.png">
                 </p>
@@ -47,76 +43,72 @@
             </a>
         {% endif %}
 
-        <!-- ===== MELHOR WR ===== -->
         <div class="main-card">
             <div class="title-row">
                 <i class="fa-solid fa-chart-line icon-wr"></i>
                 <h3>Melhor WR</h3>
             </div>
-
             <p class="highlight">53.4%</p>
             <p class="small">Maciel</p>
         </div>
 
-        <!-- ===== TOTAL DE JOGADORES ===== -->
         <div class="main-card">
             <div class="title-row">
                 <i class="fa-solid fa-users icon-users"></i>
                 <h3>Total Jogadores</h3>
             </div>
-
             <p class="highlight">{{ players|length }}</p>
             <p class="small">Ativos no Inhouse</p>
         </div>
 
-    </div> <!-- /main-cards -->
-
-
-
-    <!-- ================================ -->
-    <!-- TOP 5 -->
-    <!-- ================================ -->
-    <div class="section-title-row">
-        <h2 class="top-title">Top 5 Melhores Jogadores</h2>
-        <a href="/jogadores" class="see-all">Ver todos →</a>
     </div>
 
-    <input type="text" placeholder="Buscar entre os top 5..." class="search-bar">
+    <!-- TOP 5 - tudo dentro do wrapper -->
+    <div class="top5-wrapper">
 
-    <div class="top5-list">
+        <div class="section-title-row">
+            <h2 class="top-title">Top 5 Melhores Jogadores</h2>
+            <a href="/jogadores" class="see-all">Ver todos →</a>
+        </div>
 
-        {% for p in players %}
-            {% set raw_elo = p.elo_solo %}
-            {% set elo_name = raw_elo.split(' ')[0] | lower %}
+        <input type="text" placeholder="Buscar entre os top 5..." class="search-bar">
 
-            <a href="{{ url_for('player_profile', name=p.name) }}" class="top5-card link-card">
+        <div class="top5-list">
 
-                <img src="{{ p.icon }}" class="player-icon">
+            {% for p in players %}
+                {% set raw_elo = p.elo_solo %}
+                {% set elo_name = raw_elo.split(' ')[0] | lower %}
 
-                <div class="info">
-                    <h3>
-                        {{ p.name }}
+                <a href="{{ url_for('player_profile', name=p.name) }}" class="top5-card link-card">
 
-                        <img class="lane-icon"
-                            src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_primary }}.png">
+                    <img src="{{ p.icon }}" class="player-icon">
 
-                        <img class="lane-icon"
-                            src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_secondary }}.png">
-                    </h3>
+                    <div class="info">
+                        <h3>
+                            {{ p.name }}
 
-                    <div class="elo-line">
-                        <img class="rank-icon"
-                             src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ elo_name }}.svg">
-                        <span>{{ p.elo_solo }} • {{ p.lp_solo }} LP</span>
+                            <img class="lane-icon"
+                                src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_primary }}.png">
+
+                            <img class="lane-icon"
+                                src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p.lane_secondary }}.png">
+                        </h3>
+
+                        <div class="elo-line">
+                            <img class="rank-icon"
+                                 src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ elo_name }}.svg">
+                            <span>{{ p.elo_solo }} • {{ p.lp_solo }} LP</span>
+                        </div>
                     </div>
-                </div>
 
-            </a>
+                </a>
 
-        {% endfor %}
+            {% endfor %}
 
-    </div> <!-- /top5-list -->
+        </div>
 
-</div> <!-- /home-wrapper -->
+    </div>
+
+</div>
 
 {% endblock %}

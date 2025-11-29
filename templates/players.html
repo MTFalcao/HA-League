@@ -12,68 +12,66 @@
     <h1 class="players-title">Todos os Jogadores</h1>
     <p class="players-subtitle">Total: {{ players|length }} jogadores cadastrados</p>
 
-    <input type="text" class="players-search" placeholder="Buscar jogador...">
+    <!-- Wrapper que centraliza EXATAMENTE como os cards -->
+    <div class="players-center">
 
-    <div class="players-grid">
+        <input type="text" class="players-search" placeholder="Buscar jogador...">
 
-        {% for p in players %}
-        <a href="{{ url_for('player_profile', name=p['name']) }}" class="player-card">
+        <div class="players-grid">
 
-            <!-- Ícone -->
-            <img src="{{ p['icon'] }}" class="player-icon-large">
+            {% for p in players %}
+            <a href="{{ url_for('player_profile', name=p['name']) }}" class="player-card">
 
-            <div class="player-info">
+                <img src="{{ p['icon'] }}" class="player-icon-large">
 
-                <!-- Nome -->
-                <div class="player-name-row">
-                    <h2 class="player-name">{{ p['name'] }}</h2>
-                    <span class="player-tag">#{{ p['nickname'].split('#')[1] }}</span>
-                </div>
+                <div class="player-info">
 
-                <!-- Lanes -->
-                <div class="lane-row">
-                    <img class="lane-icon"
-                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p['lane_primary'] }}.png">
-                    <img class="lane-icon"
-                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p['lane_secondary'] }}.png">
-                </div>
+                    <div class="player-name-row">
+                        <h2 class="player-name">{{ p['name'] }}</h2>
+                        <span class="player-tag">#{{ p['nickname'].split('#')[1] }}</span>
+                    </div>
 
-                <div class="elo-row">
+                    <div class="lane-row">
+                        <img class="lane-icon"
+                            src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p['lane_primary'] }}.png">
+                        <img class="lane-icon"
+                            src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-clash/global/default/assets/images/position-selector/positions/icon-position-{{ p['lane_secondary'] }}.png">
+                    </div>
 
-                    <!-- SOLO -->
-                    <div class="elo-column">
-                        <div class="elo-top">
-                            <img class="rank-icon"
-                                 src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ p['elo_solo'].split(' ')[0] | lower }}.svg">
-                            <span class="elo-text">{{ p['elo_solo'] }} • {{ p['lp_solo'] }} LP</span>
+                    <div class="elo-row">
+                        <div class="elo-column">
+                            <div class="elo-top">
+                                <img class="rank-icon"
+                                     src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ p['elo_solo'].split(' ')[0] | lower }}.svg">
+                                <span class="elo-text">{{ p['elo_solo'] }} • {{ p['lp_solo'] }} LP</span>
+                            </div>
+                            <div class="elo-bottom">
+                                <span class="wl-text">{{ p['solo_wins'] }}W / {{ p['solo_losses'] }}L</span>
+                            </div>
                         </div>
-                        <div class="elo-bottom">
-                            <span class="wl-text">{{ p['solo_wins'] }}W / {{ p['solo_losses'] }}L</span>
+
+                        <div class="elo-column">
+                            <div class="elo-top">
+                                <img class="rank-icon"
+                                     src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ p['elo_flex'].split(' ')[0] | lower }}.svg">
+                                <span class="elo-text">{{ p['elo_flex'] }} • {{ p['lp_flex'] }} LP</span>
+                            </div>
+                            <div class="elo-bottom">
+                                <span class="wl-text">{{ p['flex_wins'] }}W / {{ p['flex_losses'] }}L</span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- FLEX -->
-                    <div class="elo-column">
-                        <div class="elo-top">
-                            <img class="rank-icon"
-                                 src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ p['elo_flex'].split(' ')[0] | lower }}.svg">
-                            <span class="elo-text">{{ p['elo_flex'] }} • {{ p['lp_flex'] }} LP</span>
-                        </div>
-                        <div class="elo-bottom">
-                            <span class="wl-text">{{ p['flex_wins'] }}W / {{ p['flex_losses'] }}L</span>
-                        </div>
-                    </div>
-
                 </div>
 
-            </div>
+            </a>
+            {% endfor %}
 
-        </a>
-        {% endfor %}
+        </div>
 
     </div>
-</div>
 
+</div>
 {% endblock %}
 
 {% block styles %}

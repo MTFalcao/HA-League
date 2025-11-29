@@ -1,7 +1,11 @@
-/* WRAPPER */
-.players-wrapper {
-    width: 90%;
-    margin: 40px auto;
+
+
+/* INNER: alinha busca + grid sem puxar pra esquerda */
+.players-inner {
+    width: 100%;
+    max-width: 1200px; /* pode ajustar se quiser */
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 /* VOLTAR */
@@ -28,7 +32,7 @@
     margin-bottom: 30px;
 }
 
-/* SEARCH */
+/* SEARCH — agora alinhada com os cards */
 .players-search {
     width: 100%;
     padding: 14px;
@@ -38,22 +42,23 @@
     background: rgba(255,255,255,0.07);
     color: white;
     font-size: 16px;
+    box-sizing: border-box;
 }
 
-/* GRID */
+/* GRID — centraliza e alinha perfeitamente com a search */
 .players-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 18px;
+    width: 100%;
+    box-sizing: border-box;
 }
-
 
 /* CARD */
 .player-card {
     display: flex;
     gap: 18px;
     padding: 18px;
-    
 
     background: rgba(17, 24, 39, 0.65);
     border-radius: 14px;
@@ -116,7 +121,6 @@
 }
 
 /* ELOS */
-/* WRAPPER dos dois elos lado a lado */
 .elo-row {
     display: flex;
     gap: 30px;
@@ -128,21 +132,16 @@
     opacity: 0.9;
 }
 
-.wl-text{
+.wl-text {
     font-size: 13px;
     opacity: 0.7;
-
 }
 
-
-
-/* Cada coluna SOLO | FLEX */
 .elo-column {
     display: flex;
     flex-direction: column;
 }
 
-/* Linha superior: icone + rank */
 .elo-top {
     display: flex;
     align-items: center;
@@ -151,9 +150,8 @@
     font-size: 15px;
 }
 
-/* Linha inferior: W/L */
 .elo-bottom {
-    margin-left: 38px; /* alinhamento com o rank */
+    margin-left: 38px;
     font-size: 14px;
     opacity: 0.9;
 }
@@ -165,8 +163,7 @@
     opacity: 0.95;
 }
 
-
-/* RESPONSIVO */
+/* RESPONSIVIDADE */
 @media (max-width: 1100px) {
     .players-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -176,5 +173,9 @@
 @media (max-width: 700px) {
     .players-grid {
         grid-template-columns: 1fr;
+    }
+
+    .players-search {
+        margin-bottom: 22px;
     }
 }

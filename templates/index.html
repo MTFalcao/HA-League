@@ -11,49 +11,49 @@
 
   {% block styles %}{% endblock %}
 </head>
-  <body>
 
-    <!-- Header -->
-    <header class="site-header">
-      <div class="header-inner">
-        <h1 class="logo">AH League</h1>
-        <nav class="nav">
-          <ul>
-            <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('players') }}">Jogadores</a></li>
-            {% if session.get('admin') %}
-              <li><a href="{{ url_for('admin') }}">Admin Panel</a></li>
-              <li><a href="{{ url_for('logout') }}">Logout</a></li>
-            {% else %}
-              <li><a href="{{ url_for('login') }}">Login</a></li>
-            {% endif %}
+<body>
 
-          </ul>
-        </nav>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="logo">AH League</h1>
+
+      <nav class="nav">
+        <ul>
+          <li><a href="{{ url_for('home') }}">Home</a></li>
+          <li><a href="{{ url_for('players') }}">Jogadores</a></li>
+
+          {% if session.get('admin') %}
+            <li><a href="{{ url_for('admin') }}">Admin Panel</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
       </div>
-    </header>
+    {% endif %}
+  {% endwith %}
 
-    <!-- 🔥 Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-      {% if messages %}
-        <div class="flash-container">
-          {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+  <!-- Conteúdo -->
+  <main class="page-wrapper">
+    {% block content %}{% endblock %}
+  </main>
 
-    <!-- Conteúdo -->
-    <main>
-      {% block content %}{% endblock %}
-    </main>
+  {% block scripts %}{% endblock %}
 
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
-
-    {% block scripts %} {% endblock %}
-
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-
-  </body>
+</body>
 </html>
