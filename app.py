@@ -160,6 +160,27 @@ def logout():
     flash("Sessão encerrada.", "info")
     return redirect(url_for("home"))
 
+# =====================================================
+# TESTE DA RIOT API 
+# =====================================================
+
+@app.route("/admin/test_riot")
+@login_required
+def test_riot():
+    import requests
+    from services.riot_api import API_KEY
+
+    url = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Faker"
+
+    r = requests.get(url, headers={"X-Riot-Token": API_KEY})
+
+    return {
+        "api_key_prefix": API_KEY[:12] + "...",
+        "status_code": r.status_code,
+        "response": r.text
+    }
+
+
 
 # =====================================================
 # HOME
