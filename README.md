@@ -1,5 +1,5 @@
 # Ashen Heralds – HA-League  
-Plataforma web para gestão e estatísticas de partidas de inhouse de :contentReference[oaicite:1]{index=1} entre amigos, com integração à API oficial da :contentReference[oaicite:2]{index=2}.
+Plataforma web para gestão e estatísticas de partidas de inhouse de league of legends entre amigos, com integração à API oficial da Riot Games.
 
 ##  Objetivo  
 - Permitir registro de jogadores e partidas de inhouse.  
