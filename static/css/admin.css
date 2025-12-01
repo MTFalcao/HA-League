@@ -104,9 +104,11 @@
     margin-bottom: 18px;
     display: flex;
     flex-direction: column;
+    
 }
 
-.field select {
+.field select,
+.field input {
     background: rgba(255,255,255,0.08);
     color: white;
     border-radius: 8px;

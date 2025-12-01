@@ -10,6 +10,11 @@
     <h1 class="edit-title">Editar Jogador</h1>
 
     <form method="POST" class="edit-card">
+
+        <div class="field">
+            <label>Nickname (Riot Tag)</label>
+            <input type="text" name="nickname" value="{{ player.nickname }}" required>
+        </div>
         
         <div class="field">
             <label>Rota Primária</label>
