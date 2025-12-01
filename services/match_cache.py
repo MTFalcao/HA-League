@@ -3,8 +3,27 @@ import json
 import time
 import os
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))  
-DB_PATH = os.path.join(BASE_DIR, "matches.db")
+# ======================================================
+# DEFINIÇÃO DOS CAMINHOS DO BANCO
+# ======================================================
+
+# Caminho persistente no Railway
+PERSISTENT_DIR = "/app/cache"
+PERSISTENT_PATH = f"{PERSISTENT_DIR}/matches.db"
+
+# Caminho local (pasta services/)
+LOCAL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "matches.db")
+
+# Escolha do DB com fallback
+if os.path.exists(PERSISTENT_PATH):
+    DB_PATH = PERSISTENT_PATH
+elif os.path.exists(LOCAL_PATH):
+    DB_PATH = LOCAL_PATH
+else:
+    # Cria a pasta no Railway se não existe
+    os.makedirs(PERSISTENT_DIR, exist_ok=True)
+    DB_PATH = PERSISTENT_PATH
+
 
 # ======================================================
 # Inicialização do DB
@@ -13,7 +32,6 @@ def init_matches_db():
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
-    # Tabela: Lista de partidas de cada jogador
     c.execute("""
         CREATE TABLE IF NOT EXISTS player_matches (
             puuid TEXT,
@@ -22,7 +40,6 @@ def init_matches_db():
         )
     """)
 
-    # Tabela: JSON das partidas completas
     c.execute("""
         CREATE TABLE IF NOT EXISTS matches (
             match_id TEXT PRIMARY KEY,
@@ -42,7 +59,7 @@ def save_player_match_id(puuid, match_id):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
     try:
-        c.execute("INSERT OR IGNORE INTO player_matches (puuid, match_id) VALUES (?, ?)", 
+        c.execute("INSERT OR IGNORE INTO player_matches (puuid, match_id) VALUES (?, ?)",
                   (puuid, match_id))
         conn.commit()
     finally:
@@ -89,21 +106,19 @@ def load_cached_match(match_id):
         return json.loads(row[0])
     return None
 
+
 # ======================================================
-# LIMPAR TODO CACHE DE UM JOGADOR (para botão refresh)
+# LIMPAR TODO CACHE DE UM JOGADOR
 # ======================================================
 def clear_player_cache(puuid):
     conn = sqlite3.connect(DB_PATH)
     c = conn.cursor()
 
-    # Pegar todos os match_ids desse jogador
     c.execute("SELECT match_id FROM player_matches WHERE puuid = ?", (puuid,))
     match_ids = [row[0] for row in c.fetchall()]
 
-    # Apagar do player_matches
     c.execute("DELETE FROM player_matches WHERE puuid = ?", (puuid,))
 
-    # Apagar JSON das partidas
     for mid in match_ids:
         c.execute("DELETE FROM matches WHERE match_id = ?", (mid,))
 
