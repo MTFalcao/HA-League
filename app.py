@@ -7,38 +7,39 @@ import psycopg2.extras
 import unicodedata
 import os
 import requests
+from dotenv import load_dotenv
+load_dotenv()
 
 from services.db import get_db_connection, init_db
 from services.riot_api import (
     get_account_data, get_summoner_data_by_puuid,
     get_ranked_stats, load_ranked_matches,
     extract_history, extract_top_champs,
-    calculate_player_stats,get_top3_masteries
+    calculate_player_stats, get_top3_masteries
 )
 
 from services.match_cache import init_matches_db, DB_PATH as MATCH_DB_PATH
-from dotenv import load_dotenv
-load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
-# Inicializar PostgreSQL e cache SQLite
+# Inicializa banco
 init_db()
 init_matches_db()
 
 
 # =====================================================
-# SANITIZAÇÃO DE PUUID + VALIDADOR
+# SANITIZAÇÃO DE PUUID
 # =====================================================
-
 def limpar_unicode(texto):
     if not texto:
         return texto
 
-    invis = ["\u200b", "\u200c", "\u200d", "\u200e", "\u200f",
-             "\u202a", "\u202b", "\u202c", "\u202d", "\u202e",
-             "\u2066", "\u2067", "\u2068", "\u2069"]
+    invis = [
+        "\u200b", "\u200c", "\u200d", "\u200e", "\u200f",
+        "\u202a", "\u202b", "\u202c", "\u202d", "\u202e",
+        "\u2066", "\u2067", "\u2068", "\u2069"
+    ]
 
     for c in invis:
         texto = texto.replace(c, "")
@@ -48,26 +49,21 @@ def limpar_unicode(texto):
 
 
 def validar_puuid(puuid):
-    """Retorna o PUUID limpo, padronizado e válido (78 chars)."""
     if not puuid:
         return puuid
 
     clean = limpar_unicode(puuid)
-
-    # Corrigir se veio com espaços/quebras
     clean = clean.replace(" ", "").replace("\n", "").replace("\r", "")
 
-    # Tamanho do PUUID da Riot = 78
     if len(clean) != 78:
         print(f"⚠️ PUUID inválido detectado: {repr(puuid)} -> len={len(clean)}")
+
     return clean
 
 
 def corrigir_puuids_no_banco():
-    """Limpa silenciosamente todos os PUUIDs contaminados existentes no PostgreSQL."""
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("SELECT puuid FROM players")
     rows = cur.fetchall()
 
@@ -85,7 +81,6 @@ def corrigir_puuids_no_banco():
     conn.close()
 
 
-# Corrige todos os PUUIDs sempre ao iniciar servidor
 corrigir_puuids_no_banco()
 
 
@@ -95,7 +90,7 @@ corrigir_puuids_no_banco()
 def login_required(func):
     def wrapper(*args, **kwargs):
         if "admin" not in session:
-            flash("Você precisa estar logado para acessar isso.", "error")
+            flash("Você precisa estar logado.", "error")
             return redirect(url_for("login"))
         return func(*args, **kwargs)
     wrapper.__name__ = func.__name__
@@ -112,15 +107,16 @@ def get_all_players():
     return data
 
 
-# Carrega lista de campeões 1 vez
+# Carrega lista de campeões apenas uma vez
 champ_list = requests.get(
     "https://ddragon.leagueoflegends.com/cdn/14.1.1/data/en_US/champion.json"
 ).json()["data"]
 
+
 def get_champion_name_by_id(champ_id):
     for champ in champ_list.values():
         if int(champ["key"]) == champ_id:
-            return champ["id"]   # Ex: "Yasuo"
+            return champ["id"]
     return None
 
 
@@ -135,7 +131,6 @@ def format_pts(value):
 # =====================================================
 # LOGIN
 # =====================================================
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -160,26 +155,33 @@ def logout():
     flash("Sessão encerrada.", "info")
     return redirect(url_for("home"))
 
-# =====================================================
-# TESTE DA RIOT API 
-# =====================================================
 
+# =====================================================
+# TESTE DA API DA RIOT
+# =====================================================
 @app.route("/admin/test_riot")
 @login_required
 def test_riot():
-    import requests
     from services.riot_api import API_KEY
 
-    url = "https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-name/Faker"
+    riot_id = "Jolene#BR2"
 
-    r = requests.get(url, headers={"X-Riot-Token": API_KEY})
+    account = get_account_data(riot_id)
+    if not account:
+        return {"ok": False, "message": "Erro ao buscar Riot ID"}
+
+    puuid = account["puuid"]
+    summoner = get_summoner_data_by_puuid(puuid)
+    ranked = get_ranked_stats(puuid)
 
     return {
+        "ok": True,
+        "riot_id": riot_id,
         "api_key_prefix": API_KEY[:12] + "...",
-        "status_code": r.status_code,
-        "response": r.text
+        "puuid": puuid,
+        "summoner": summoner,
+        "ranked": ranked
     }
-
 
 
 # =====================================================
@@ -194,7 +196,6 @@ def home():
 # =====================================================
 # LISTA DE JOGADORES
 # =====================================================
-
 @app.route("/jogadores")
 def players():
     players = get_all_players()
@@ -210,7 +211,6 @@ def players():
             "lp_solo": elo["solo_lp"],
             "solo_wins": elo["solo_wins"],
             "solo_losses": elo["solo_losses"],
-
             "elo_flex": elo["flex_tier"],
             "lp_flex": elo["flex_lp"],
             "flex_wins": elo["flex_wins"],
@@ -223,7 +223,6 @@ def players():
 # =====================================================
 # PAINEL ADMIN
 # =====================================================
-
 @app.route("/admin")
 @login_required
 def admin():
@@ -232,19 +231,15 @@ def admin():
 
 
 # =====================================================
-# APAGAR JOGADOR
+# REMOVER JOGADOR
 # =====================================================
-
 @app.route("/admin/delete/<nickname>", methods=["POST"])
 @login_required
 def delete_player(nickname):
-
     conn = get_db_connection()
     cur = conn.cursor()
-
     cur.execute("DELETE FROM players WHERE nickname=%s", (nickname,))
     conn.commit()
-
     cur.close()
     conn.close()
 
@@ -252,11 +247,9 @@ def delete_player(nickname):
     return redirect(url_for("admin"))
 
 
-
 # =====================================================
 # EDITAR JOGADOR
 # =====================================================
-
 @app.route("/admin/edit/<nickname>", methods=["GET", "POST"])
 @login_required
 def edit_player(nickname):
@@ -295,10 +288,10 @@ def edit_player(nickname):
     conn.close()
     return render_template("edit_player.html", player=player)
 
+
 # =====================================================
 # PERFIL DO JOGADOR
 # =====================================================
-
 @app.route("/player/<name>")
 def player_profile(name):
 
@@ -315,9 +308,7 @@ def player_profile(name):
 
     puuid = validar_puuid(player["puuid"])
 
-    # ============================
-    #  RANQUEADAS
-    # ============================
+    # Rank
     elo = get_ranked_stats(puuid)
 
     solo_total = elo["solo_wins"] + elo["solo_losses"]
@@ -326,40 +317,38 @@ def player_profile(name):
     flex_total = elo["flex_wins"] + elo["flex_losses"]
     wr_flex = round(elo["flex_wins"] / flex_total * 100, 1) if flex_total else 0
 
-    # ============================
-    #  PARTIDAS
-    # ============================
+    # Partidas
     matches = load_ranked_matches(puuid, count=50)
     history = extract_history(puuid, matches, limit=10)
     stats = calculate_player_stats(history)
     top_champs = extract_top_champs(puuid, matches)
 
-    # ============================
-    #  TOP 3 MAESTRIAS
-    # ============================
+    # Maestrias
     top3 = get_top3_masteries(puuid)
-
-
     if top3:
         for m in top3:
             champ_key = get_champion_name_by_id(m["championId"])
-            m["championName"] = champ_key  # usado no ícone
+            m["championName"] = champ_key
 
-    return render_template("player_profile.html",
-                           player=player,
-                           history=history,
-                           stats=stats,
-                           wr_solo=wr_solo,
-                           wr_flex=wr_flex,
-                           top_champs=top_champs,
-                           top3=top3)
+    return render_template(
+        "player_profile.html",
+        player=player,
+        history=history,
+        stats=stats,
+        wr_solo=wr_solo,
+        wr_flex=wr_flex,
+        top_champs=top_champs,
+        top3=top3
+    )
 
 
+# =====================================================
+# REFRESH
+# =====================================================
 @app.route("/refresh/<puuid>")
 def refresh_player_history(puuid):
     puuid = validar_puuid(puuid)
 
-    # 1. identificar nome do jogador
     conn = get_db_connection()
     cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute("SELECT name FROM players WHERE puuid=%s", (puuid,))
@@ -371,18 +360,15 @@ def refresh_player_history(puuid):
         flash("Jogador não encontrado!", "error")
         return redirect(url_for("players"))
 
-    # 2. carregar apenas partidas novas
-    matches = load_ranked_matches(puuid, count=50)
+    load_ranked_matches(puuid, count=50)
 
-    flash("Histórico foi atualizado com partidas novas!", "success")
-
+    flash("Histórico atualizado!", "success")
     return redirect(url_for("player_profile", name=player["name"]))
 
 
 # =====================================================
 # CADASTRAR (ADMIN)
 # =====================================================
-
 @app.route("/cadastrar", methods=["GET", "POST"])
 @login_required
 def cadastrar():
@@ -407,7 +393,9 @@ def cadastrar():
         summoner = get_summoner_data_by_puuid(puuid)
         elo = get_ranked_stats(puuid)
 
-        icon_url = f"https://ddragon.leagueoflegends.com/cdn/15.23.1/img/profileicon/{summoner['profileIconId']}.png"
+        # fallback seguro
+        icon_id = summoner.get("profileIconId") or 1
+        icon_url = f"https://ddragon.leagueoflegends.com/cdn/15.23.1/img/profileicon/{icon_id}.png"
 
         lane_primary = request.form.get("lane_primary")
         lane_secondary = request.form.get("lane_secondary")
@@ -457,5 +445,5 @@ if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
         port=int(os.environ.get("PORT", 5000)),
-        debug=True
+        debug=False
     )

@@ -2,7 +2,6 @@ import requests
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
 
 from services.match_cache import (
@@ -32,38 +31,36 @@ def get_account_data(riot_id):
 
 
 # ============================================================
-# 2) Buscar Summoner pelo PUUID
+# 2) Buscar Summoner pelo PUUID (compatível com Personal Key)
 # ============================================================
 def get_summoner_data_by_puuid(puuid):
     url = f"https://br1.api.riotgames.com/lol/summoner/v4/summoners/by-puuid/{puuid}"
     headers = {"X-Riot-Token": API_KEY}
 
-    response = requests.get(url, headers=headers)
+    r = requests.get(url, headers=headers)
+    
+    # Summoner V4 falha com personal key em campos criptografados
+    if r.status_code != 200:
+        return {
+            "profileIconId": 1,
+            "summonerLevel": 0,
+            "puuid": puuid,
+            "name": None,       
+        }
 
-    if response.status_code != 200:
-        return None
+    data = r.json()
 
-    data = response.json()
-
-    # Se a Riot retornou erro tipo:
-    # {"status": {"message": "...", "status_code": ...}}
-    if "status" in data:
-        print("❌ Erro Summoner API:", data["status"])
-        return None
-
+    # Nome pode ser None — isso é esperado com Personal Key
     return {
         "name": data.get("name"),
         "profileIconId": data.get("profileIconId"),
         "summonerLevel": data.get("summonerLevel"),
         "puuid": data.get("puuid"),
-        "id": data.get("id"),        # encryptedSummonerId
-        "accountId": data.get("accountId")
     }
 
 
-
 # ============================================================
-# 3) Rank Solo/Duo e Flex
+# 3) Rank Solo/Duo e Flex (funciona com Personal Key)
 # ============================================================
 def get_ranked_stats(puuid):
     url = f"https://br1.api.riotgames.com/lol/league/v4/entries/by-puuid/{puuid}"
@@ -81,7 +78,6 @@ def get_ranked_stats(puuid):
             "flex_losses": 0,
         }
 
-    # Default
     solo_tier, solo_lp, solo_wins, solo_losses = "UNRANKED", 0, 0, 0
     flex_tier, flex_lp, flex_wins, flex_losses = "UNRANKED", 0, 0, 0
 
@@ -109,12 +105,12 @@ def get_ranked_stats(puuid):
         "flex_losses": flex_losses,
     }
 
+
 # ============================================================
-# 4) CARREGAR TODAS AS PARTIDAS SÓ UMA VEZ (SOLUÇÃO 3)
+# 4) Carregar partidas
 # ============================================================
 def load_ranked_matches(puuid, count=50):
 
-    # PASSO 1 — Buscar IDs da Riot
     match_ids = []
 
     url_420 = f"https://americas.api.riotgames.com/lol/match/v5/matches/by-puuid/{puuid}/ids?queue=420&start=0&count={count}"
@@ -125,27 +121,19 @@ def load_ranked_matches(puuid, count=50):
         if r.status_code == 200:
             match_ids += r.json()
 
-    # Remove duplicados
     match_ids = list(dict.fromkeys(match_ids))
 
-    # PASSO 2 — Buscar match_ids já salvos no cache
     cached_ids = get_player_match_ids(puuid)
-
     matches = []
 
     for match_id in match_ids:
-
-        # Registrar ID no cache
         save_player_match_id(puuid, match_id)
 
-        # Verificar se já temos o JSON no cache
         cached_match = load_cached_match(match_id)
-
         if cached_match:
             matches.append(cached_match)
             continue
 
-        # PASSO 3 — Se não existir, buscar NA RIOT e salvar
         url = f"https://americas.api.riotgames.com/lol/match/v5/matches/{match_id}"
         r = requests.get(url, headers={"X-Riot-Token": API_KEY})
 
