@@ -5,42 +5,80 @@
 
 {% block content %}
 
+
 <div class="edit-wrapper">
 
     <h1 class="edit-title">Editar Jogador</h1>
 
-    <form method="POST" class="edit-card">
+    <form method="POST">
 
-        <div class="field">
-            <label>Nickname (Riot Tag)</label>
-            <input type="text" name="nickname" value="{{ player.nickname }}" required>
-        </div>
-        
-        <div class="field">
-            <label>Rota Primária</label>
-            <select name="lane_primary" required>
-                <option value="top"  {% if player.lane_primary == 'top' %}selected{% endif %}>Top</option>
-                <option value="jungle" {% if player.lane_primary == 'jungle' %}selected{% endif %}>Jungle</option>
-                <option value="middle" {% if player.lane_primary == 'middle' %}selected{% endif %}>Mid</option>
-                <option value="bottom" {% if player.lane_primary == 'bottom' %}selected{% endif %}>ADC</option>
-                <option value="utility" {% if player.lane_primary == 'utility' %}selected{% endif %}>Suporte</option>
-            </select>
+        <div class="edit-grid">
+
+            <!-- CARD 1 — DADOS GERAIS -->
+            <div class="edit-card">
+                <h2 style="margin-bottom: 15px;">Dados do Jogador</h2>
+
+                <div class="field">
+                    <label>Nickname (Riot Tag)</label>
+                    <input type="text" name="nickname" value="{{ player.nickname }}" required>
+                </div>
+
+                <div class="field">
+                    <label>Discord Name</label>
+                    <input type="text" name="discord_name" value="{{ player.discord_name }}">
+                </div>
+
+                <div class="field">
+                    <label>Rota Primária</label>
+                    <select name="lane_primary" required>
+                        <option value="top"     {% if player.lane_primary == 'top' %}selected{% endif %}>Top</option>
+                        <option value="jungle"  {% if player.lane_primary == 'jungle' %}selected{% endif %}>Jungle</option>
+                        <option value="middle"  {% if player.lane_primary == 'middle' %}selected{% endif %}>Mid</option>
+                        <option value="bottom"  {% if player.lane_primary == 'bottom' %}selected{% endif %}>ADC</option>
+                        <option value="utility" {% if player.lane_primary == 'utility' %}selected{% endif %}>Suporte</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Rota Secundária</label>
+                    <select name="lane_secondary">
+                        <option value="top"     {% if player.lane_secondary == 'top' %}selected{% endif %}>Top</option>
+                        <option value="jungle"  {% if player.lane_secondary == 'jungle' %}selected{% endif %}>Jungle</option>
+                        <option value="middle"  {% if player.lane_secondary == 'middle' %}selected{% endif %}>Mid</option>
+                        <option value="bottom"  {% if player.lane_secondary == 'bottom' %}selected{% endif %}>ADC</option>
+                        <option value="utility" {% if player.lane_secondary == 'utility' %}selected{% endif %}>Suporte</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- CARD 2 — INHOUSE -->
+            <div class="edit-card">
+                <h2 style="margin-bottom: 15px;">Estatísticas do Inhouse</h2>
+
+                <div class="field">
+                    <label>Vitórias</label>
+                    <input type="number" name="wins" value="{{ inhouse.wins }}">
+                </div>
+
+                <div class="field">
+                    <label>Derrotas</label>
+                    <input type="number" name="losses" value="{{ inhouse.losses }}">
+                </div>
+
+                <div class="field">
+                    <label>MMR Total</label>
+                    <input type="number" name="total_mmr" value="{{ inhouse.mmr }}">
+                </div>
+
+                <div class="field">
+                    <label>Partidas Jogadas</label>
+                    <input type="number" name="matches_played" value="{{ inhouse.matches }}">
+                </div>
+            </div>
+
         </div>
 
-        <div class="field">
-            <label>Rota Secundária</label>
-            <select name="lane_secondary">
-                <option value="top"  {% if player.lane_secondary == 'top' %}selected{% endif %}>Top</option>
-                <option value="jungle" {% if player.lane_secondary == 'jungle' %}selected{% endif %}>Jungle</option>
-                <option value="middle" {% if player.lane_secondary == 'middle' %}selected{% endif %}>Mid</option>
-                <option value="bottom" {% if player.lane_secondary == 'bottom' %}selected{% endif %}>ADC</option>
-                <option value="utility" {% if player.lane_secondary == 'utility' %}selected{% endif %}>Suporte</option>
-            </select>
-        </div>
-
-        <button class="save-btn" type="submit">
-            Salvar Alterações
-        </button>
+        <button class="save-btn" type="submit">Salvar Alterações</button>
 
     </form>
 

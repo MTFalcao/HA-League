@@ -57,7 +57,9 @@ main.page-wrapper {
     flex-shrink: 0;
 }
 
-.profile-info { min-width: 0; }
+.profile-info { 
+    min-width: 0; 
+}
 
 .name-row {
     display: flex;
@@ -125,6 +127,7 @@ main.page-wrapper {
     color: white;
     padding: 12px 14px;
     border-radius: 12px;
+    align-content: center;
     font-size: 18px;
     transition: 0.2s;
 }
@@ -337,7 +340,7 @@ main.page-wrapper {
 }
 
 
-/* ------- 900px → 651px (NOVO FIX) ------- */
+
 @media (max-width: 900px) {
 
 

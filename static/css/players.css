@@ -3,7 +3,7 @@
 /* INNER: alinha busca + grid sem puxar pra esquerda */
 .players-inner {
     width: 100%;
-    max-width: 1200px; /* pode ajustar se quiser */
+    max-width: 1200px; 
     margin: 0 auto;
     box-sizing: border-box;
 }

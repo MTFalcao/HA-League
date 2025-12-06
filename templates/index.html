@@ -23,7 +23,7 @@
         <ul>
           <li><a href="{{ url_for('home') }}">Home</a></li>
           <li><a href="{{ url_for('players') }}">Jogadores</a></li>
-
+          <li><a href="{{ url_for('ranking') }}">Ranking Inhouse</a></li>
           {% if session.get('admin') %}
             <li><a href="{{ url_for('admin') }}">Admin Panel</a></li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>

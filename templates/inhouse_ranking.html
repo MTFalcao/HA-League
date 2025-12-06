@@ -1,0 +1,62 @@
+{% extends "index.html" %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ranking.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="ranking-header unified-header">
+    <h1 class="ranking-title">
+         Ranking
+    </h1>
+    <p class="ranking-subtitle">Melhores jogadores por MMR e Vitórias</p>
+</div>
+
+<div class="ranking-filters">
+    <a href="{{ url_for('ranking', order='mmr') }}" class="filter-btn {{ 'active' if order == 'mmr' else '' }}">Por MMR</a>      
+    <a href="{{ url_for('ranking', order='wins') }}" class="filter-btn {{ 'active' if order == 'wins' else '' }}">Por Vitórias</a>
+</div>
+
+<div class="ranking-list">
+
+{% for p in players %}
+    <a href="{{ url_for('player_profile', name=p.name) }}" class="ranking-card-link">
+
+        <div class="ranking-card">
+
+            <div class="left-section">
+
+                <div class="rank-number">#{{ loop.index }}</div>
+
+                <img src="{{ p.icon }}" class="rank-icon">
+
+                <div class="info">
+                    <div class="name-line">
+                        <span class="player-name">{{ p.name }}</span>
+                        <img class="elo-icon"
+                        src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-mini-crests/{{ p.elo_solo.split(' ')[0] | lower }}.svg">
+                    </div>
+
+                    <div class="vh-line">
+                        {{ p.inhouse.wins }} vitórias • {{ p.inhouse.losses }} derrotas
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="right-section">
+                <div class="mmr">{{ p.inhouse.mmr }}</div>
+                <div class="mmr-label">MMR</div>
+            </div>
+
+        </div>
+
+    </a>
+{% endfor %}
+
+</div>
+
+
+{% endblock %}
